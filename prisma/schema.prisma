@@ -26,6 +26,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   employee      Employee?
+  headOfDepartment Department?
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -78,7 +79,8 @@ model Employee {
   dateOfBirth     DateTime?
 
   // Job Information
-  department      String
+  departmentId    String?
+  department      Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
   position        String
   employeeId      String   @unique
   joinDate        DateTime
@@ -100,4 +102,21 @@ model Employee {
 
   @@index([userId])
   @@index([employeeId])
+  @@index([departmentId])
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  headId      String?  @unique
+  head        User?    @relation(fields: [headId], references: [id], onDelete: SetNull)
+  logo        String?
+  description String?  @db.Text
+
+  employees   Employee[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([headId])
 }

@@ -10,7 +10,11 @@ export interface Employee {
   lastName: string
   phoneNumber: string | null
   dateOfBirth: string | null
-  department: string
+  departmentId: string | null
+  department: {
+    id: string
+    name: string
+  } | null
   position: string
   employeeId: string
   joinDate: string

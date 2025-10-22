@@ -8,7 +8,7 @@ const updateEmployeeSchema = z.object({
   lastName: z.string().min(1).optional(),
   phoneNumber: z.string().optional(),
   dateOfBirth: z.string().optional(),
-  department: z.string().min(1).optional(),
+  departmentId: z.string().optional().nullable(),
   position: z.string().min(1).optional(),
   employeeId: z.string().min(1).optional(),
   joinDate: z.string().optional(),
@@ -56,6 +56,12 @@ export async function GET(
             name: true,
             email: true,
             role: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
           },
         },
       },
@@ -143,6 +149,12 @@ export async function PUT(
             name: true,
             email: true,
             role: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
           },
         },
       },

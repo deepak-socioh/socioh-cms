@@ -27,15 +27,23 @@ export default function Navbar({ user }: NavbarProps) {
                 href="/dashboard"
                 className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
               >
-                {user.role === 'ADMIN' ? 'Manage Employees' : 'My Profile'}
+                {user.role === 'ADMIN' ? 'Employees' : 'My Profile'}
               </Link>
               {user.role === 'ADMIN' && (
-                <Link
-                  href="/dashboard/users"
-                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"
-                >
-                  Users
-                </Link>
+                <>
+                  <Link
+                    href="/dashboard/departments"
+                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"
+                  >
+                    Departments
+                  </Link>
+                  <Link
+                    href="/dashboard/users"
+                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"
+                  >
+                    Users
+                  </Link>
+                </>
               )}
             </div>
           </div>

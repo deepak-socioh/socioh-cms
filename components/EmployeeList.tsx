@@ -48,7 +48,9 @@ export default function EmployeeList({
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Department</p>
-                      <p className="text-sm text-gray-900">{employee.department}</p>
+                      <p className="text-sm text-gray-900">
+                        {employee.department?.name || 'Not assigned'}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Position</p>

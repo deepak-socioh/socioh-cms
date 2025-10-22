@@ -8,7 +8,7 @@ const employeeSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   phoneNumber: z.string().optional(),
   dateOfBirth: z.string().optional(),
-  department: z.string().min(1, 'Department is required'),
+  departmentId: z.string().optional().nullable(),
   position: z.string().min(1, 'Position is required'),
   employeeId: z.string().min(1, 'Employee ID is required'),
   joinDate: z.string().min(1, 'Join date is required'),
@@ -44,6 +44,12 @@ export async function GET(request: NextRequest) {
               role: true,
             },
           },
+          department: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
         orderBy: {
           createdAt: 'desc',
@@ -63,6 +69,12 @@ export async function GET(request: NextRequest) {
               name: true,
               email: true,
               role: true,
+            },
+          },
+          department: {
+            select: {
+              id: true,
+              name: true,
             },
           },
         },
@@ -112,6 +124,7 @@ export async function POST(request: NextRequest) {
           ? new Date(validatedData.dateOfBirth)
           : null,
         joinDate: new Date(validatedData.joinDate),
+        departmentId: validatedData.departmentId || null,
       },
       include: {
         user: {
@@ -120,6 +133,12 @@ export async function POST(request: NextRequest) {
             name: true,
             email: true,
             role: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
           },
         },
       },
