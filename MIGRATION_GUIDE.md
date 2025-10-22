@@ -2,7 +2,71 @@
 
 The database tables need to be created before the application can work. Follow these steps:
 
-## Option 1: Using Vercel Postgres (Recommended for Vercel deployments)
+## Option 1: Using Neon DB (Serverless Postgres)
+
+If you're using Neon DB (recommended for serverless deployments):
+
+### Step 1: Get your Neon database connection string
+1. Go to your Neon dashboard (https://console.neon.tech)
+2. Select your project
+3. Go to "Connection Details" or "Dashboard"
+4. Copy the connection string - it should look like:
+   ```
+   postgresql://user:password@ep-xxx-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require
+   ```
+
+### Step 2: Set up your local environment
+Create a `.env` file in the root directory:
+
+```bash
+# Your Neon database connection string
+DATABASE_URL="postgresql://user:password@ep-xxx-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require"
+
+# NextAuth configuration
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+
+# Google OAuth credentials
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+# Email domain restriction
+ALLOWED_EMAIL_DOMAIN="yourcompany.com"
+```
+
+### Step 3: Install dependencies
+```bash
+npm install
+```
+
+### Step 4: Run the migration
+```bash
+npx prisma migrate deploy
+```
+
+This will create all the necessary tables in your Neon database.
+
+### Step 5: Generate Prisma Client
+```bash
+npx prisma generate
+```
+
+### Step 6: Verify the migration
+```bash
+npx prisma studio
+```
+
+This opens a browser-based database viewer where you can see all your tables.
+
+### Step 7: Set environment variables in Vercel
+1. Go to your Vercel project settings
+2. Navigate to "Environment Variables"
+3. Add all the variables from your `.env` file
+4. Redeploy your application
+
+---
+
+## Option 2: Using Vercel Postgres (Alternative)
 
 If you're using Vercel Postgres, you can run migrations directly from your local machine:
 
