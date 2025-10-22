@@ -23,14 +23,14 @@ export default function Navbar({ user }: NavbarProps) {
               </h1>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
-              >
-                {user.role === 'ADMIN' ? 'Employees' : 'My Profile'}
-              </Link>
-              {user.role === 'ADMIN' && (
+              {user.role === 'ADMIN' ? (
                 <>
+                  <Link
+                    href="/dashboard"
+                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                  >
+                    Employees
+                  </Link>
                   <Link
                     href="/dashboard/departments"
                     className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"
@@ -44,6 +44,13 @@ export default function Navbar({ user }: NavbarProps) {
                     Users
                   </Link>
                 </>
+              ) : (
+                <Link
+                  href="/dashboard"
+                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                >
+                  Home
+                </Link>
               )}
             </div>
           </div>
@@ -57,6 +64,12 @@ export default function Navbar({ user }: NavbarProps) {
                     {user.role}
                   </p>
                 </div>
+                <Link
+                  href="/dashboard/profile"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  My Profile
+                </Link>
                 <button
                   onClick={() => signOut({ callbackUrl: '/auth/signin' })}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
