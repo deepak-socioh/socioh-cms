@@ -1,0 +1,5 @@
+email,name,role,first_name,last_name,employee_id,position,department,join_date,phone
+deepak@socioh.com,Deepak Kumar,ADMIN,Deepak,Kumar,EMP001,CEO,Management,2020-01-15,+91-9876543210
+john@socioh.com,John Doe,USER,John,Doe,EMP002,Senior Developer,Engineering,2021-03-20,+91-9876543211
+jane@socioh.com,Jane Smith,USER,Jane,Smith,EMP003,UI/UX Designer,Design,2021-06-10,+91-9876543212
+bob@socioh.com,Bob Johnson,USER,Bob,Johnson,EMP004,Marketing Manager,Marketing,2022-01-05,+91-9876543213
