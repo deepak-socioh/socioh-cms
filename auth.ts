@@ -11,7 +11,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig.callbacks,
     async jwt({ token, user, account, trigger }) {
       // Initial sign in
-      if (user) {
+      if (user && user.id) {
         token.id = user.id
         token.email = user.email
         token.role = (user as any).role || 'USER'
