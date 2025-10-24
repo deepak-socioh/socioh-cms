@@ -21,15 +21,29 @@ export const authConfig = {
   },
   callbacks: {
     async signIn({ user, account }) {
+      console.log('=== SignIn Callback ===')
+      console.log('User email:', user.email)
+      console.log('User name:', user.name)
+
       if (!user.email) {
+        console.log('❌ Sign in failed: No email provided')
         return false
       }
 
       const allowedDomain = process.env.ALLOWED_EMAIL_DOMAIN
-      if (allowedDomain && !user.email.endsWith(`@${allowedDomain}`)) {
-        return false
+      console.log('Allowed domain:', allowedDomain)
+
+      if (allowedDomain && allowedDomain !== 'yourcompany.com') {
+        const emailDomain = user.email.split('@')[1]
+        console.log('Email domain:', emailDomain)
+
+        if (!user.email.endsWith(`@${allowedDomain}`)) {
+          console.log(`❌ Sign in failed: Email domain ${emailDomain} does not match allowed domain ${allowedDomain}`)
+          return `/auth/error?error=EmailNotAllowed&domain=${emailDomain}`
+        }
       }
 
+      console.log('✅ Sign in successful')
       return true
     },
     async jwt({ token, user, trigger }) {
