@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Employee Directory CMS',
+  title: 'Socioh CRM',
   description: 'Manage your company employee directory',
 }
 
@@ -13,6 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="https://cdn.prod.website-files.com/5f32467af6c27b4300272729/61f2481dd6560ec5dc062678_Emblem.svg" type="image/svg+xml" />
+      </head>
       <body>{children}</body>
     </html>
   )

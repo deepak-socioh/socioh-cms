@@ -25,3 +25,11 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer base {
+  input,
+  select,
+  textarea {
+    @apply text-gray-700;
+  }
+}

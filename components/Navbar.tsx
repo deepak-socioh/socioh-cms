@@ -7,6 +7,7 @@ interface NavbarProps {
   user: {
     name?: string | null
     email?: string | null
+    image?: string | null
     role: 'ADMIN' | 'USER'
   }
 }
@@ -19,7 +20,7 @@ export default function Navbar({ user }: NavbarProps) {
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <h1 className="text-xl font-bold text-gray-900">
-                Employee Directory
+                Socioh CRM
               </h1>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -37,11 +38,24 @@ export default function Navbar({ user }: NavbarProps) {
                   Users
                 </Link>
               )}
+              <Link
+                href="/dashboard/holidays"
+                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"
+              >
+                Holidays
+              </Link>
             </div>
           </div>
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <div className="flex items-center space-x-4">
+                {user.image && (
+                  <img
+                    src={user.image}
+                    alt={user.name || 'User'}
+                    className="h-10 w-10 rounded-full object-cover border-2 border-blue-500"
+                  />
+                )}
                 <div className="text-sm">
                   <p className="text-gray-900 font-medium">{user.name}</p>
                   <p className="text-gray-500 text-xs">{user.email}</p>

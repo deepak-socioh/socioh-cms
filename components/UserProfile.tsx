@@ -37,6 +37,8 @@ export default function UserProfile({ userId }: UserProfileProps) {
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [profileImage, setProfileImage] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     phoneNumber: '',
     address: '',
@@ -56,6 +58,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
         const data = await response.json()
         if (data.length > 0) {
           setEmployee(data[0])
+          setProfileImage(data[0].user.image)
           setFormData({
             phoneNumber: data[0].phoneNumber || '',
             address: data[0].address || '',
@@ -79,6 +82,36 @@ export default function UserProfile({ userId }: UserProfileProps) {
   useEffect(() => {
     fetchEmployee()
   }, [userId])
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setProfileImage(data.url)
+        // Refresh employee data to get updated image
+        await fetchEmployee()
+      } else {
+        alert('Failed to upload image')
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      alert('Error uploading image')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -146,12 +179,41 @@ export default function UserProfile({ userId }: UserProfileProps) {
 
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="px-4 py-5 sm:px-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">
-              Employee Information
-            </h3>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              Personal details and contact information
-            </p>
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  Employee Information
+                </h3>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                  Personal details and contact information
+                </p>
+              </div>
+              <div className="flex flex-col items-center">
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="h-24 w-24 rounded-full object-cover border-2 border-blue-500"
+                  />
+                ) : (
+                  <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center border-2 border-gray-300">
+                    <span className="text-gray-500 text-sm">No Image</span>
+                  </div>
+                )}
+                <label className="mt-2 cursor-pointer">
+                  <span className="text-xs text-blue-600 hover:text-blue-800">
+                    {uploading ? 'Uploading...' : 'Change Photo'}
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            </div>
           </div>
 
           {editing ? (
