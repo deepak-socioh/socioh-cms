@@ -2,11 +2,18 @@ import { signIn } from '@/auth'
 
 export default function SignIn() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
         <div>
+          <div className="flex justify-center mb-4">
+            <img
+              src="https://cdn.prod.website-files.com/5f32467af6c27b4300272729/61f2481dd6560ec5dc062678_Emblem.svg"
+              alt="Socioh Logo"
+              className="h-20 w-20"
+            />
+          </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Employee Directory CMS
+            Socioh CRM
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Sign in with your company Google account
