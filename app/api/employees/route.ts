@@ -8,7 +8,7 @@ const employeeSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   phoneNumber: z.string().optional(),
   dateOfBirth: z.string().optional(),
-  department: z.string().min(1, 'Department is required'),
+  departmentId: z.string().min(1, 'Department is required'),
   position: z.string().min(1, 'Position is required'),
   employeeId: z.string().min(1, 'Employee ID is required'),
   joinDate: z.string().min(1, 'Join date is required'),
@@ -137,6 +137,13 @@ export async function POST(request: NextRequest) {
             email: true,
             role: true,
             image: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
           },
         },
       },

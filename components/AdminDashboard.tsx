@@ -27,6 +27,8 @@ export interface Employee {
   emergencyContactName: string | null
   emergencyContactPhone: string | null
   emergencyContactRelation: string | null
+  married?: boolean
+  marriageAnniversary?: string | null
   user: {
     id: string
     name: string | null
@@ -284,9 +286,10 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
   }
 
   // Get unique values for filter dropdowns
-  const departments = [...new Set(employees.map(emp => emp.department?.name).filter(Boolean))].sort()
-  const countries = [...new Set(employees.map(emp => emp.country).filter(Boolean))].sort()
-  const joiningYears = [...new Set(employees.map(emp => new Date(emp.joinDate).getFullYear().toString()))].sort((a, b) => parseInt(b) - parseInt(a))
+  const departments = Array.from(new Set(employees.map(emp => emp.department?.name).filter(Boolean))).sort()
+  const countries = Array.from(new Set(employees.map(emp => emp.country).filter(Boolean))) as string[]
+  countries.sort()
+  const joiningYears = Array.from(new Set(employees.map(emp => new Date(emp.joinDate).getFullYear().toString()))).sort((a, b) => parseInt(b) - parseInt(a))
   
   // Filter employees based on search and filters
   const filteredEmployees = employees.filter(employee => {

@@ -59,12 +59,27 @@ export const authConfig = {
           const firstName = nameParts[0] || user.email?.split('@')[0] || ''
           const lastName = nameParts.slice(1).join(' ') || ''
           
+          // Find or create a default department
+          let defaultDepartment = await prisma.department.findFirst({
+            where: { name: 'General' }
+          })
+          
+          if (!defaultDepartment) {
+            defaultDepartment = await prisma.department.create({
+              data: {
+                name: 'General',
+                description: 'Default department for new employees',
+                isActive: true
+              }
+            })
+          }
+
           await prisma.employee.create({
             data: {
               userId: existingUser.id,
               firstName,
               lastName,
-              department: 'General',
+              departmentId: defaultDepartment.id,
               position: 'Employee',
               employeeId: `EMP-${Date.now()}`,
               joinDate: new Date(),
