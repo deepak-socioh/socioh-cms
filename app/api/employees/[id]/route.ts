@@ -8,7 +8,9 @@ const updateEmployeeSchema = z.object({
   lastName: z.string().min(1).optional(),
   phoneNumber: z.string().optional(),
   dateOfBirth: z.string().optional(),
-  department: z.string().min(1).optional(),
+  married: z.boolean().optional(),
+  marriageAnniversary: z.string().optional(),
+  departmentId: z.string().min(1).optional(),
   position: z.string().min(1).optional(),
   employeeId: z.string().min(1).optional(),
   joinDate: z.string().optional(),
@@ -25,6 +27,10 @@ const updateEmployeeSchema = z.object({
 // Fields that regular users can update
 const userEditableFields = [
   'phoneNumber',
+  'dateOfBirth',
+  'married',
+  'marriageAnniversary',
+  'joinDate',
   'address',
   'city',
   'state',
@@ -56,6 +62,14 @@ export async function GET(
             name: true,
             email: true,
             role: true,
+            image: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
           },
         },
       },
@@ -132,6 +146,9 @@ export async function PUT(
     if (dataToUpdate.joinDate) {
       dataToUpdate.joinDate = new Date(dataToUpdate.joinDate)
     }
+    if (dataToUpdate.marriageAnniversary) {
+      dataToUpdate.marriageAnniversary = new Date(dataToUpdate.marriageAnniversary)
+    }
 
     const updatedEmployee = await prisma.employee.update({
       where: { id: params.id },
@@ -143,6 +160,14 @@ export async function PUT(
             name: true,
             email: true,
             role: true,
+            image: true,
+          },
+        },
+        department: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
           },
         },
       },

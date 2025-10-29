@@ -15,8 +15,16 @@ interface EmployeeFormProps {
   onClose: () => void
 }
 
+interface Department {
+  id: string
+  name: string
+  description: string | null
+  isActive: boolean
+}
+
 export default function EmployeeForm({ employee, onClose }: EmployeeFormProps) {
   const [availableUsers, setAvailableUsers] = useState<User[]>([])
+  const [departments, setDepartments] = useState<Department[]>([])
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     userId: employee?.user.id || '',
@@ -26,7 +34,7 @@ export default function EmployeeForm({ employee, onClose }: EmployeeFormProps) {
     dateOfBirth: employee?.dateOfBirth
       ? new Date(employee.dateOfBirth).toISOString().split('T')[0]
       : '',
-    department: employee?.department || '',
+    departmentId: employee?.department?.id || '',
     position: employee?.position || '',
     employeeId: employee?.employeeId || '',
     joinDate: employee?.joinDate
@@ -46,6 +54,7 @@ export default function EmployeeForm({ employee, onClose }: EmployeeFormProps) {
     if (!employee) {
       fetchAvailableUsers()
     }
+    fetchDepartments()
   }, [employee])
 
   const fetchAvailableUsers = async () => {
@@ -57,6 +66,18 @@ export default function EmployeeForm({ employee, onClose }: EmployeeFormProps) {
       }
     } catch (error) {
       console.error('Error fetching users:', error)
+    }
+  }
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await fetch('/api/departments?activeOnly=true')
+      if (response.ok) {
+        const data = await response.json()
+        setDepartments(data)
+      }
+    } catch (error) {
+      console.error('Error fetching departments:', error)
     }
   }
 
@@ -224,15 +245,21 @@ export default function EmployeeForm({ employee, onClose }: EmployeeFormProps) {
               <label className="block text-sm font-medium text-gray-700">
                 Department *
               </label>
-              <input
-                type="text"
+              <select
                 required
-                value={formData.department}
+                value={formData.departmentId}
                 onChange={(e) =>
-                  setFormData({ ...formData, department: e.target.value })
+                  setFormData({ ...formData, departmentId: e.target.value })
                 }
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+              >
+                <option value="">Select a department...</option>
+                {departments.map((dept) => (
+                  <option key={dept.id} value={dept.id}>
+                    {dept.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>

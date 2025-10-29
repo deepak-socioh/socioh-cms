@@ -1,5 +1,6 @@
 import type { NextAuthConfig } from "next-auth"
 import Google from "next-auth/providers/google"
+import { prisma } from "@/lib/prisma"
 
 export const authConfig = {
   providers: [
@@ -41,6 +42,40 @@ export const authConfig = {
           console.log(`❌ Sign in failed: Email domain ${emailDomain} does not match allowed domain ${allowedDomain}`)
           return `/auth/error?error=EmailNotAllowed&domain=${emailDomain}`
         }
+      }
+
+      // Create employee record if it doesn't exist
+      try {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email },
+          include: { employee: true }
+        })
+
+        if (existingUser && !existingUser.employee) {
+          console.log('Creating employee record for:', user.email)
+          
+          // Extract first and last name from user.name
+          const nameParts = user.name?.split(' ') || ['', '']
+          const firstName = nameParts[0] || user.email?.split('@')[0] || ''
+          const lastName = nameParts.slice(1).join(' ') || ''
+          
+          await prisma.employee.create({
+            data: {
+              userId: existingUser.id,
+              firstName,
+              lastName,
+              department: 'General',
+              position: 'Employee',
+              employeeId: `EMP-${Date.now()}`,
+              joinDate: new Date(),
+            }
+          })
+          
+          console.log('✅ Employee record created successfully')
+        }
+      } catch (error) {
+        console.error('Error creating employee record:', error)
+        // Don't fail sign in if employee creation fails
       }
 
       console.log('✅ Sign in successful')

@@ -30,6 +30,6 @@ body {
   input,
   select,
   textarea {
-    @apply text-gray-700;
+    @apply text-gray-900;
   }
 }

@@ -11,9 +11,10 @@ const s3Client = new S3Client({
 export async function uploadToS3(
   file: Buffer,
   fileName: string,
-  contentType: string
+  contentType: string,
+  userId: string
 ): Promise<string> {
-  const key = `socioh-cms/${fileName}`
+  const key = `socioh-cms/${userId}/profiles/${fileName}`
 
   const command = new PutObjectCommand({
     Bucket: 'socioh-public',

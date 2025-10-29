@@ -10,9 +10,5 @@ export default async function DashboardPage() {
     redirect('/auth/signin')
   }
 
-  if (session.user.role === 'ADMIN') {
-    return <AdminDashboard />
-  }
-
   return <UserProfile userId={session.user.id} />
 }

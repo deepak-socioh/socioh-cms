@@ -2,6 +2,7 @@
 
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 interface NavbarProps {
   user: {
@@ -13,6 +14,17 @@ interface NavbarProps {
 }
 
 export default function Navbar({ user }: NavbarProps) {
+  const pathname = usePathname()
+
+  const getLinkClassName = (href: string) => {
+    const isActive = pathname === href
+    return `inline-flex items-center px-1 pt-1 text-sm font-medium ${
+      isActive
+        ? 'text-blue-600 border-b-2 border-blue-600'
+        : 'text-gray-500 hover:text-gray-900 hover:border-b-2 hover:border-gray-300'
+    }`
+  }
+
   return (
     <nav className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,24 +38,38 @@ export default function Navbar({ user }: NavbarProps) {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                className={getLinkClassName('/dashboard')}
               >
-                {user.role === 'ADMIN' ? 'Manage Employees' : 'My Profile'}
+                My Profile
+              </Link>
+              <Link
+                href="/dashboard/team"
+                className={getLinkClassName('/dashboard/team')}
+              >
+                Team
               </Link>
               {user.role === 'ADMIN' && (
                 <Link
-                  href="/dashboard/users"
-                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"
+                  href="/dashboard/departments"
+                  className={getLinkClassName('/dashboard/departments')}
                 >
-                  Users
+                  Departments
                 </Link>
               )}
               <Link
                 href="/dashboard/holidays"
-                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"
+                className={getLinkClassName('/dashboard/holidays')}
               >
                 Holidays
               </Link>
+              {user.role === 'ADMIN' && (
+                <Link
+                  href="/dashboard/users"
+                  className={getLinkClassName('/dashboard/users')}
+                >
+                  Users
+                </Link>
+              )}
             </div>
           </div>
           <div className="flex items-center">

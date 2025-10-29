@@ -68,7 +68,11 @@ export default async function UsersPage() {
                       </div>
                     </div>
                     <div className="text-sm text-gray-500">
-                      Joined: {new Date(user.createdAt).toLocaleDateString()}
+                      Joined: {new Date(user.createdAt).toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}
                     </div>
                   </div>
                 </div>

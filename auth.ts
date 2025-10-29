@@ -9,21 +9,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   callbacks: {
     ...authConfig.callbacks,
-    async session({ session, token }) {
-      if (session.user && token.id) {
-        session.user.id = token.id as string
-
-        // Fetch user from database to get latest role
-        const dbUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
-          select: { role: true }
-        })
-
-        if (dbUser) {
-          session.user.role = dbUser.role
-        }
-      }
-      return session
-    },
   },
 })

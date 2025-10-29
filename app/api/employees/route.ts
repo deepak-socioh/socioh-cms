@@ -42,6 +42,14 @@ export async function GET(request: NextRequest) {
               name: true,
               email: true,
               role: true,
+              image: true,
+            },
+          },
+          department: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
             },
           },
         },
@@ -63,6 +71,14 @@ export async function GET(request: NextRequest) {
               name: true,
               email: true,
               role: true,
+              image: true,
+            },
+          },
+          department: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
             },
           },
         },
@@ -120,6 +136,7 @@ export async function POST(request: NextRequest) {
             name: true,
             email: true,
             role: true,
+            image: true,
           },
         },
       },

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
 
     // Upload to S3
-    const imageUrl = await uploadToS3(buffer, fileName, file.type)
+    const imageUrl = await uploadToS3(buffer, fileName, file.type, session.user.id)
 
     // Update user's image in database
     await prisma.user.update({
