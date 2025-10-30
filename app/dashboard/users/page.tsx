@@ -1,6 +1,7 @@
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
+import DashboardLayout from '@/components/DashboardLayout'
 
 export default async function UsersPage() {
   const session = await auth()
@@ -29,11 +30,14 @@ export default async function UsersPage() {
   })
 
   return (
-    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div className="px-4 py-6 sm:px-0">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-6">
-          User Management
-        </h1>
+    <DashboardLayout>
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
+          <p className="mt-1 text-sm text-gray-600">
+            Manage system users and their access levels
+          </p>
+        </div>
 
         <div className="bg-white shadow overflow-hidden sm:rounded-md">
           <ul className="divide-y divide-gray-200">
@@ -81,6 +85,6 @@ export default async function UsersPage() {
           </ul>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }

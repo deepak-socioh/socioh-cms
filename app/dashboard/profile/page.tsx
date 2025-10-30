@@ -1,9 +1,9 @@
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import DashboardLayout from '@/components/DashboardLayout'
-import AdminDashboard from '@/components/AdminDashboard'
+import ProfileCards from '@/components/ProfileCards'
 
-export default async function TeamPage() {
+export default async function ProfilePage() {
   const session = await auth()
 
   if (!session?.user) {
@@ -13,15 +13,13 @@ export default async function TeamPage() {
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Team Directory</h1>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
           <p className="mt-1 text-sm text-gray-600">
-            {session.user.role === 'ADMIN' 
-              ? 'View and manage team members' 
-              : 'Browse team members'}
+            Manage your personal information and settings
           </p>
         </div>
-        <AdminDashboard readOnly={session.user.role !== 'ADMIN'} />
+        <ProfileCards userId={session.user.id} />
       </div>
     </DashboardLayout>
   )
