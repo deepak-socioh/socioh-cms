@@ -29,6 +29,11 @@ export interface Employee {
   emergencyContactRelation: string | null
   married?: boolean
   marriageAnniversary?: string | null
+  alternateEmail?: string | null
+  panCardUrl?: string | null
+  bankAccountHolderName?: string | null
+  bankAccountNumber?: string | null
+  bankIFSCCode?: string | null
   user: {
     id: string
     name: string | null

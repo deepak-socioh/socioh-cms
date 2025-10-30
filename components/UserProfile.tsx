@@ -33,6 +33,11 @@ interface Employee {
   emergencyContactName: string | null
   emergencyContactPhone: string | null
   emergencyContactRelation: string | null
+  alternateEmail?: string | null
+  panCardUrl?: string | null
+  bankAccountHolderName?: string | null
+  bankAccountNumber?: string | null
+  bankIFSCCode?: string | null
   user: {
     id: string
     name: string | null
@@ -51,7 +56,9 @@ export default function UserProfile({ userId }: UserProfileProps) {
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [uploadingPan, setUploadingPan] = useState(false)
   const [profileImage, setProfileImage] = useState<string | null>(null)
+  const [panCardUrl, setPanCardUrl] = useState<string | null>(null)
   const [countries, setCountries] = useState<Country[]>([])
   const [countrySearch, setCountrySearch] = useState('')
   const [showCountryDropdown, setShowCountryDropdown] = useState(false)
@@ -71,6 +78,10 @@ export default function UserProfile({ userId }: UserProfileProps) {
     emergencyContactPhone: '',
     emergencyContactPhoneCountryCode: '+1',
     emergencyContactRelation: '',
+    alternateEmail: '',
+    bankAccountHolderName: '',
+    bankAccountNumber: '',
+    bankIFSCCode: '',
   })
 
   const countryCodes = [
@@ -119,6 +130,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
         if (data.length > 0) {
           setEmployee(data[0])
           setProfileImage(data[0].user.image)
+          setPanCardUrl(data[0].panCardUrl)
           // Parse existing phone number to separate country code and number
           const parsePhoneNumber = (fullNumber: string) => {
             if (!fullNumber) return { countryCode: '+1', number: '' }
@@ -149,6 +161,10 @@ export default function UserProfile({ userId }: UserProfileProps) {
             emergencyContactPhone: emergencyPhone.number,
             emergencyContactPhoneCountryCode: emergencyPhone.countryCode,
             emergencyContactRelation: data[0].emergencyContactRelation || '',
+            alternateEmail: data[0].alternateEmail || '',
+            bankAccountHolderName: data[0].bankAccountHolderName || '',
+            bankAccountNumber: data[0].bankAccountNumber || '',
+            bankIFSCCode: data[0].bankIFSCCode || '',
           })
         }
       }
@@ -194,6 +210,33 @@ export default function UserProfile({ userId }: UserProfileProps) {
     }
   }
 
+  const handlePanCardUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingPan(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setPanCardUrl(data.url)
+        // Refresh employee data to get updated PAN card
+        await fetchEmployee()
+      } else {
+        alert('Failed to upload PAN card')
+      }
+    } catch (error) {
+      console.error('Error uploading PAN card:', error)
+      alert('Error uploading PAN card')
+    } finally {
+      setUploadingPan(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!employee) return
@@ -209,6 +252,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
         emergencyContactPhone: formData.emergencyContactPhone 
           ? `${formData.emergencyContactPhoneCountryCode} ${formData.emergencyContactPhone}` 
           : '',
+        panCardUrl: panCardUrl,
       }
 
       const response = await fetch(`/api/employees/${employee.id}`, {
@@ -629,6 +673,127 @@ export default function UserProfile({ userId }: UserProfileProps) {
                       </div>
                     </div>
                   </div>
+
+                  {/* Additional Contact Section */}
+                  <div>
+                    <h4 className="text-lg font-medium text-gray-900 mb-4">Additional Contact</h4>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Alternate Email
+                      </label>
+                      <input
+                        type="email"
+                        value={formData.alternateEmail}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            alternateEmail: e.target.value,
+                          })
+                        }
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                        placeholder="Enter alternate email"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Documents Section */}
+                  <div>
+                    <h4 className="text-lg font-medium text-gray-900 mb-4">Documents</h4>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        PAN Card
+                      </label>
+                      <div className="flex items-center space-x-4">
+                        {panCardUrl && (
+                          <div className="flex items-center space-x-2">
+                            <img
+                              src={panCardUrl}
+                              alt="PAN Card"
+                              className="h-20 w-32 object-cover border rounded"
+                            />
+                            <a
+                              href={panCardUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm"
+                            >
+                              View Full Size
+                            </a>
+                          </div>
+                        )}
+                        <label className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                          {uploadingPan ? 'Uploading...' : panCardUrl ? 'Change PAN Card' : 'Upload PAN Card'}
+                          <input
+                            type="file"
+                            accept="image/*,.pdf"
+                            onChange={handlePanCardUpload}
+                            disabled={uploadingPan}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Banking Details Section */}
+                  <div>
+                    <h4 className="text-lg font-medium text-gray-900 mb-4">Banking Details</h4>
+                    <div className="grid grid-cols-1 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Account Holder Name
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.bankAccountHolderName}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              bankAccountHolderName: e.target.value,
+                            })
+                          }
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          placeholder="Enter account holder name"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            Bank Account Number
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.bankAccountNumber}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                bankAccountNumber: e.target.value,
+                              })
+                            }
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                            placeholder="Enter account number"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">
+                            IFSC Code
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.bankIFSCCode}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                bankIFSCCode: e.target.value,
+                              })
+                            }
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                            placeholder="Enter IFSC code"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex justify-end space-x-3 pt-6">
@@ -776,6 +941,62 @@ export default function UserProfile({ userId }: UserProfileProps) {
                         <br />
                         {employee.emergencyContactPhone}
                       </>
+                    ) : (
+                      'Not provided'
+                    )}
+                  </dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">
+                    Alternate Email
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {employee.alternateEmail || 'Not provided'}
+                  </dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">
+                    PAN Card
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {employee.panCardUrl ? (
+                      <div className="flex items-center space-x-4">
+                        <img
+                          src={employee.panCardUrl}
+                          alt="PAN Card"
+                          className="h-16 w-24 object-cover border rounded"
+                        />
+                        <a
+                          href={employee.panCardUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 text-sm"
+                        >
+                          View Document
+                        </a>
+                      </div>
+                    ) : (
+                      'Not uploaded'
+                    )}
+                  </dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">
+                    Banking Details
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {employee.bankAccountHolderName || employee.bankAccountNumber || employee.bankIFSCCode ? (
+                      <div className="space-y-1">
+                        {employee.bankAccountHolderName && (
+                          <div><span className="font-medium">Account Holder:</span> {employee.bankAccountHolderName}</div>
+                        )}
+                        {employee.bankAccountNumber && (
+                          <div><span className="font-medium">Account Number:</span> {employee.bankAccountNumber}</div>
+                        )}
+                        {employee.bankIFSCCode && (
+                          <div><span className="font-medium">IFSC Code:</span> {employee.bankIFSCCode}</div>
+                        )}
+                      </div>
                     ) : (
                       'Not provided'
                     )}

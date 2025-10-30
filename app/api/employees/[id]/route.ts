@@ -22,6 +22,11 @@ const updateEmployeeSchema = z.object({
   emergencyContactName: z.string().optional(),
   emergencyContactPhone: z.string().optional(),
   emergencyContactRelation: z.string().optional(),
+  alternateEmail: z.string().optional(),
+  panCardUrl: z.string().optional(),
+  bankAccountHolderName: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
+  bankIFSCCode: z.string().optional(),
 })
 
 // Fields that regular users can update
@@ -39,6 +44,11 @@ const userEditableFields = [
   'emergencyContactName',
   'emergencyContactPhone',
   'emergencyContactRelation',
+  'alternateEmail',
+  'panCardUrl',
+  'bankAccountHolderName',
+  'bankAccountNumber',
+  'bankIFSCCode',
 ]
 
 // GET - Get employee by ID
