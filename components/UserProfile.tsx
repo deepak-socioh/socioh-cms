@@ -113,7 +113,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
 
   const fetchEmployee = async () => {
     try {
-      const response = await fetch('/api/employees')
+      const response = await fetch('/api/employees/me')
       if (response.ok) {
         const data = await response.json()
         if (data.length > 0) {

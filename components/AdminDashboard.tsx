@@ -171,7 +171,7 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('/api/employees')
+      const response = await fetch('/api/employees/team')
       if (response.ok) {
         const data = await response.json()
         setEmployees(data)

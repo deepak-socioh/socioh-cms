@@ -59,31 +59,9 @@ export async function GET(request: NextRequest) {
       })
       return NextResponse.json(employees)
     } else {
-      // Regular user can see all employees (read-only access via team page)
-      const employees = await prisma.employee.findMany({
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              role: true,
-              image: true,
-            },
-          },
-          department: {
-            select: {
-              id: true,
-              name: true,
-              description: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      })
-      return NextResponse.json(employees)
+      // Regular user gets access denied - they should use /api/employees/me for their own data
+      // or /api/employees/team for team directory access
+      return NextResponse.json({ error: 'Access denied. Use /api/employees/me for your profile or contact admin for team access.' }, { status: 403 })
     }
   } catch (error) {
     console.error('Error fetching employees:', error)
