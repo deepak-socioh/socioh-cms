@@ -59,11 +59,8 @@ export async function GET(request: NextRequest) {
       })
       return NextResponse.json(employees)
     } else {
-      // Regular user can only see their own data
-      const employee = await prisma.employee.findUnique({
-        where: {
-          userId: session.user.id,
-        },
+      // Regular user can see all employees (read-only access via team page)
+      const employees = await prisma.employee.findMany({
         include: {
           user: {
             select: {
@@ -82,8 +79,11 @@ export async function GET(request: NextRequest) {
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
       })
-      return NextResponse.json(employee ? [employee] : [])
+      return NextResponse.json(employees)
     }
   } catch (error) {
     console.error('Error fetching employees:', error)
