@@ -1,7 +1,7 @@
 'use client'
 
-import { ReactNode, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { ReactNode, useState, useRef, useEffect } from 'react'
+import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -29,8 +29,25 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   const isAdmin = session?.user?.role === 'ADMIN'
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setUserDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: '/auth/signin' })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -82,40 +99,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               )
             })}
           </nav>
-
-          {/* User info */}
-          <div className="p-4 border-t border-gray-200">
-            <div className="flex items-center">
-              {session?.user?.image ? (
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src={session.user.image}
-                  alt={session.user.name || ''}
-                />
-              ) : (
-                <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                  <span className="text-sm font-medium text-gray-700">
-                    {session?.user?.name?.charAt(0) || session?.user?.email?.charAt(0)}
-                  </span>
-                </div>
-              )}
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700">
-                  {session?.user?.name}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {session?.user?.role}
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
       {/* Main content */}
       <div className="lg:pl-64">
-        {/* Mobile header */}
-        <div className="sticky top-0 z-10 flex h-16 bg-white shadow lg:hidden">
+        {/* Top header with user dropdown */}
+        <div className="sticky top-0 z-10 flex h-16 bg-white shadow">
+          {/* Mobile menu button */}
           <button
             onClick={() => setSidebarOpen(true)}
             className="px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 lg:hidden"
@@ -135,8 +126,77 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               />
             </svg>
           </button>
-          <div className="flex-1 flex justify-between items-center px-4">
-            <h1 className="text-lg font-semibold text-gray-900">Dashboard</h1>
+          
+          {/* Header content */}
+          <div className="flex-1 flex justify-between items-center px-4 lg:px-6">
+            <h1 className="text-lg font-semibold text-gray-900 lg:hidden">Dashboard</h1>
+            <div className="hidden lg:block"></div> {/* Spacer for desktop */}
+            
+            {/* User dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {session?.user?.image ? (
+                  <img
+                    className="h-8 w-8 rounded-full"
+                    src={session.user.image}
+                    alt={session.user.name || ''}
+                  />
+                ) : (
+                  <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
+                    <span className="text-sm font-medium text-gray-700">
+                      {session?.user?.name?.charAt(0) || session?.user?.email?.charAt(0)}
+                    </span>
+                  </div>
+                )}
+                <div className="hidden lg:block text-left">
+                  <p className="text-sm font-medium text-gray-700">
+                    {session?.user?.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {session?.user?.role}
+                  </p>
+                </div>
+                <svg
+                  className="h-4 w-4 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {/* Dropdown menu */}
+              {userDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    <Link
+                      href="/dashboard/profile"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setUserDropdownOpen(false)}
+                    >
+                      <span className="mr-3">👤</span>
+                      Edit Profile
+                    </Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <span className="mr-3">🚪</span>
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
