@@ -104,21 +104,7 @@
     "marriageAnniversary": "",
     "employeeId": "EMP-CATARINA-007"
   },
-  {
-    "email": "deepak@socioh.com",
-    "firstName": "Deepak",
-    "lastName": "Chauhan",
-    "position": "Director of Technology",
-    "joinDate": "2017-03-01",
-    "departmentName": "Engineering",
-    "department": "cmhmg6rq70005gm5wknk2jkyw",
-    "phoneNumber": "(857) 000-8456",
-    "address": "106 GF, New Housing Board, Dadri Gate, Bhiwani-127021",
-    "dateOfBirth": "1994-06-21",
-    "married": true,
-    "marriageAnniversary": "2025-11-19",
-    "employeeId": "EMP-DEEPAK-008"
-  },
+  
   {
     "email": "devapriya@socioh.com",
     "firstName": "Devapriya",
@@ -179,21 +165,7 @@
     "marriageAnniversary": "",
     "employeeId": "EMP-HAZEL-012"
   },
-  {
-    "email": "karan@socioh.com",
-    "firstName": "Karan",
-    "lastName": "Jassar",
-    "position": "Founder & CEO",
-    "joinDate": "2012-09-01",
-    "departmentName": "Sales, Executive",
-    "department": "cmhmg6rq90007gm5wsgmcstld",
-    "phoneNumber": "(995) 832-9288",
-    "address": "C-184, Defence colony, New Delhi - 110024",
-    "dateOfBirth": "1982-03-10",
-    "married": true,
-    "marriageAnniversary": "2025-02-21",
-    "employeeId": "EMP-KARAN-013"
-  },
+ 
   {
     "email": "kimberly@socioh.com",
     "firstName": "Kimberly",
@@ -299,21 +271,7 @@
     "marriageAnniversary": "2025-02-21",
     "employeeId": "EMP-SAHIBA-020"
   },
-  {
-    "email": "sakhil@socioh.com",
-    "firstName": "Sakhil",
-    "lastName": "Chawla",
-    "position": "Co-Founder & CTO",
-    "joinDate": "2012-09-01",
-    "departmentName": "Engineering, Executive",
-    "department": "cmhmg6rq70005gm5wknk2jkyw",
-    "phoneNumber": "16479171782",
-    "address": "",
-    "dateOfBirth": "1990-07-02",
-    "married": true,
-    "marriageAnniversary": "2025-12-03",
-    "employeeId": "EMP-SAKHIL-021"
-  },
+  
   {
     "email": "santiago@socioh.com",
     "firstName": "Santiago",
