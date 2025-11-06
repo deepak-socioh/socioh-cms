@@ -10,6 +10,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     ...authConfig.callbacks,
   },
-  // Enable account linking for same email addresses
-  allowDangerousEmailAccountLinking: true,
+  trustHost: true,
 })

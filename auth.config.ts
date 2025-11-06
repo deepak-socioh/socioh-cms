@@ -25,10 +25,31 @@ export const authConfig = {
       console.log('=== SignIn Callback ===')
       console.log('User email:', user.email)
       console.log('User name:', user.name)
+      console.log('Account provider:', account?.provider)
 
       if (!user.email) {
         console.log('❌ Sign in failed: No email provided')
         return false
+      }
+
+      // Check if user exists with different provider - allow linking
+      if (account?.provider === 'google') {
+        const existingUserWithDifferentProvider = await prisma.user.findUnique({
+          where: { email: user.email },
+          include: { accounts: true }
+        })
+        
+        if (existingUserWithDifferentProvider) {
+          const hasGoogleAccount = existingUserWithDifferentProvider.accounts.some(
+            acc => acc.provider === 'google'
+          )
+          
+          if (!hasGoogleAccount) {
+            console.log('✅ Allowing account linking for existing user with different provider')
+            // NextAuth will handle the account linking automatically
+            return true
+          }
+        }
       }
 
       const allowedDomain = process.env.ALLOWED_EMAIL_DOMAIN
