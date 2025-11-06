@@ -17,7 +17,7 @@ export default async function DashboardPage() {
             Welcome back, {session.user.name?.split(' ')[0] || 'User'}! 👋
           </h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Here's what's happening with your workspace today.
+            Here&apos;s what&apos;s happening with your workspace today.
           </p>
           {/* Theme test indicator */}
           {/* <div className="mt-4 p-3 bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100 text-sm rounded-lg border border-blue-200 dark:border-blue-700">

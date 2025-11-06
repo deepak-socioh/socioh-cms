@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 interface Holiday {
   id: string
@@ -48,7 +48,7 @@ export default function HolidayList({ user }: HolidayListProps) {
     { value: 12, label: 'December' },
   ]
 
-  const fetchHolidays = async () => {
+  const fetchHolidays = useCallback(async () => {
     setLoading(true)
     try {
       let url = `/api/holidays?year=${selectedYear}`
@@ -65,11 +65,11 @@ export default function HolidayList({ user }: HolidayListProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedYear, selectedMonth])
 
   useEffect(() => {
     fetchHolidays()
-  }, [selectedYear, selectedMonth])
+  }, [selectedYear, selectedMonth, fetchHolidays])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

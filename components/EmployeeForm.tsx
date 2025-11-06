@@ -219,7 +219,7 @@ export default function EmployeeForm({ employee, onClose }: EmployeeFormProps) {
                     className="block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-400"
                   />
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    If this email doesn't exist in the system, a new user account will be created.
+                    If this email doesn&apos;t exist in the system, a new user account will be created.
                   </p>
                 </div>
               )}

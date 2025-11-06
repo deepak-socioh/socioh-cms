@@ -58,7 +58,7 @@ export const authConfig = {
               email: user.email
             },
             userId: {
-              not: null
+              not: null as any
             }
           },
           include: {
