@@ -7,7 +7,10 @@
       "Bash(psql:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "WebSearch",
+      "Bash(sed:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

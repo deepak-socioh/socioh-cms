@@ -44,15 +44,43 @@ export const authConfig = {
         }
       }
 
-      // Create employee record if it doesn't exist
+      // Handle employee record linking and creation
       try {
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email },
           include: { employee: true }
         })
 
-        if (existingUser && !existingUser.employee) {
-          console.log('Creating employee record for:', user.email)
+        // First, check if there's an employee record created with this email but no user linked
+        const orphanedEmployee = await prisma.employee.findFirst({
+          where: {
+            user: {
+              email: user.email
+            },
+            userId: {
+              not: null
+            }
+          },
+          include: {
+            user: true
+          }
+        })
+
+        if (orphanedEmployee && orphanedEmployee.user && existingUser) {
+          // There's already an employee record for this email, just ensure it's linked properly
+          console.log('Employee record already exists for:', user.email)
+          
+          // Update the user's name if it wasn't set properly
+          if (!existingUser.name && user.name) {
+            await prisma.user.update({
+              where: { id: existingUser.id },
+              data: { name: user.name }
+            })
+            console.log('✅ Updated user name from auth provider')
+          }
+        } else if (existingUser && !existingUser.employee) {
+          // User exists but no employee record - create one
+          console.log('Creating employee record for existing user:', user.email)
           
           // Extract first and last name from user.name
           const nameParts = user.name?.split(' ') || ['', '']
@@ -87,10 +115,12 @@ export const authConfig = {
           })
           
           console.log('✅ Employee record created successfully')
+        } else {
+          console.log('User already has employee record or no action needed')
         }
       } catch (error) {
-        console.error('Error creating employee record:', error)
-        // Don't fail sign in if employee creation fails
+        console.error('Error handling employee record:', error)
+        // Don't fail sign in if employee handling fails
       }
 
       console.log('✅ Sign in successful')

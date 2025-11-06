@@ -291,7 +291,10 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading...</div>
+        <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+          <span>Loading...</span>
+        </div>
       </div>
     )
   }
@@ -299,7 +302,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
   if (!employee) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">No employee data found.</p>
+        <p className="text-gray-500 dark:text-gray-400">No employee data found.</p>
       </div>
     )
   }
@@ -307,9 +310,12 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
   return (
     <div className="space-y-6">
       {/* Profile Picture Card */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Profile Picture</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+            <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+            Profile Picture
+          </h3>
         </div>
         <div className="flex items-center space-x-4">
           {profileImage ? (
@@ -325,7 +331,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
               </span>
             </div>
           )}
-          <label className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          <label className="cursor-pointer inline-flex items-center px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
             {uploading ? 'Uploading...' : 'Change Photo'}
             <input
               type="file"
@@ -339,12 +345,15 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
       </div>
 
       {/* Personal Information Card */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Personal Information</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+            <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+            Personal Information
+          </h3>
           <button
             onClick={() => setEditingCard(editingCard === 'personal' ? null : 'personal')}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
           >
             {editingCard === 'personal' ? 'Cancel' : 'Edit'}
           </button>
@@ -357,8 +366,8 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
           }} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-                <div className="mt-1 flex rounded-md shadow-sm">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+                <div className="flex rounded-lg shadow-sm">
                   <select
                     value={personalForm.phoneCountryCode}
                     onChange={(e) =>
@@ -367,7 +376,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                         phoneCountryCode: e.target.value,
                       })
                     }
-                    className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
+                    className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     {countryCodes.map((cc) => (
                       <option key={cc.code} value={cc.code}>
@@ -384,13 +393,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                         phoneNumber: e.target.value,
                       })
                     }
-                    className="flex-1 border border-gray-300 rounded-r-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-r-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                     placeholder="Enter phone number"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date of Birth</label>
                 <input
                   type="date"
                   value={personalForm.dateOfBirth}
@@ -400,13 +409,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                       dateOfBirth: e.target.value,
                     })
                   }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Alternate Email</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Alternate Email</label>
                 <input
                   type="email"
                   value={personalForm.alternateEmail}
@@ -416,7 +425,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                       alternateEmail: e.target.value,
                     })
                   }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                   placeholder="Enter alternate email"
                 />
               </div>
@@ -434,15 +443,15 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                           marriageAnniversary: e.target.checked ? personalForm.marriageAnniversary : '',
                         })
                       }
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded transition-all duration-200"
                     />
-                    <label htmlFor="married" className="ml-2 block text-sm text-gray-900">
+                    <label htmlFor="married" className="ml-2 block text-sm text-gray-900 dark:text-white dark:text-gray-300">
                       Married
                     </label>
                   </div>
                   {personalForm.married && (
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-gray-700">Anniversary</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Anniversary</label>
                       <input
                         type="date"
                         value={personalForm.marriageAnniversary}
@@ -452,7 +461,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                             marriageAnniversary: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       />
                     </div>
                   )}
@@ -463,13 +472,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
               <button
                 type="button"
                 onClick={() => setEditingCard(null)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg shadow-blue-500/30"
               >
                 Save Changes
               </button>
@@ -479,12 +488,12 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <dt className="text-sm font-medium text-gray-500">Phone Number</dt>
-                <dd className="text-sm text-gray-900">{employee.phoneNumber || 'Not provided'}</dd>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Phone Number</dt>
+                <dd className="text-sm text-gray-900 dark:text-white dark:text-gray-100">{employee.phoneNumber || 'Not provided'}</dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Date of Birth</dt>
-                <dd className="text-sm text-gray-900">
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Date of Birth</dt>
+                <dd className="text-sm text-gray-900 dark:text-white dark:text-gray-100">
                   {employee.dateOfBirth 
                     ? new Date(employee.dateOfBirth).toLocaleDateString('en-US', { 
                         year: 'numeric', 
@@ -498,12 +507,12 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <dt className="text-sm font-medium text-gray-500">Alternate Email</dt>
-                <dd className="text-sm text-gray-900">{employee.alternateEmail || 'Not provided'}</dd>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Alternate Email</dt>
+                <dd className="text-sm text-gray-900 dark:text-white dark:text-gray-100">{employee.alternateEmail || 'Not provided'}</dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Marital Status</dt>
-                <dd className="text-sm text-gray-900">
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Marital Status</dt>
+                <dd className="text-sm text-gray-900 dark:text-white dark:text-gray-100">
                   {employee.married ? 'Married' : 'Single'}
                   {employee.married && employee.marriageAnniversary && (
                     <span className="text-xs text-gray-500 block">
@@ -521,12 +530,15 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
       </div>
 
       {/* Address Information Card */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Address Information</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+            <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+            Address Information
+          </h3>
           <button
             onClick={() => setEditingCard(editingCard === 'address' ? null : 'address')}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
           >
             {editingCard === 'address' ? 'Cancel' : 'Edit'}
           </button>
@@ -543,41 +555,41 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                 type="text"
                 value={addressForm.address}
                 onChange={(e) => setAddressForm({ ...addressForm, address: e.target.value })}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">City</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">City</label>
                 <input
                   type="text"
                   value={addressForm.city}
                   onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">State</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">State</label>
                 <input
                   type="text"
                   value={addressForm.state}
                   onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">ZIP Code</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">ZIP Code</label>
                 <input
                   type="text"
                   value={addressForm.zipCode}
                   onChange={(e) => setAddressForm({ ...addressForm, zipCode: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
               <div className="relative">
-                <label className="block text-sm font-medium text-gray-700">Country</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Country</label>
                 <input
                   type="text"
                   value={countrySearch || addressForm.country}
@@ -586,7 +598,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                     setShowCountryDropdown(true)
                   }}
                   onFocus={() => setShowCountryDropdown(true)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
                 {showCountryDropdown && (
                   <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none">
@@ -612,13 +624,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
               <button
                 type="button"
                 onClick={() => setEditingCard(null)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg shadow-blue-500/30"
               >
                 Save Changes
               </button>
@@ -628,7 +640,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
           <div className="space-y-3">
             <div>
               <dt className="text-sm font-medium text-gray-500">Address</dt>
-              <dd className="text-sm text-gray-900">
+              <dd className="text-sm text-gray-900 dark:text-white">
                 {employee.address && employee.city ? (
                   <>
                     {employee.address}<br />
@@ -645,12 +657,15 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
       </div>
 
       {/* Emergency Contact Card */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Emergency Contact</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+            <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+            Emergency Contact
+          </h3>
           <button
             onClick={() => setEditingCard(editingCard === 'emergency' ? null : 'emergency')}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
           >
             {editingCard === 'emergency' ? 'Cancel' : 'Edit'}
           </button>
@@ -672,13 +687,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                     emergencyContactName: e.target.value,
                   })
                 }
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-                <div className="mt-1 flex rounded-md shadow-sm">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+                <div className="flex rounded-lg shadow-sm">
                   <select
                     value={emergencyForm.emergencyContactPhoneCountryCode}
                     onChange={(e) =>
@@ -687,7 +702,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                         emergencyContactPhoneCountryCode: e.target.value,
                       })
                     }
-                    className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
+                    className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     {countryCodes.map((cc) => (
                       <option key={cc.code} value={cc.code}>
@@ -704,13 +719,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                         emergencyContactPhone: e.target.value,
                       })
                     }
-                    className="flex-1 border border-gray-300 rounded-r-md py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-r-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                     placeholder="Enter phone number"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Relation</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Relation</label>
                 <input
                   type="text"
                   value={emergencyForm.emergencyContactRelation}
@@ -720,7 +735,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                       emergencyContactRelation: e.target.value,
                     })
                   }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
             </div>
@@ -728,13 +743,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
               <button
                 type="button"
                 onClick={() => setEditingCard(null)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg shadow-blue-500/30"
               >
                 Save Changes
               </button>
@@ -744,7 +759,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
           <div className="space-y-3">
             <div>
               <dt className="text-sm font-medium text-gray-500">Emergency Contact</dt>
-              <dd className="text-sm text-gray-900">
+              <dd className="text-sm text-gray-900 dark:text-white">
                 {employee.emergencyContactName ? (
                   <>
                     {employee.emergencyContactName}
@@ -763,12 +778,15 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
       </div>
 
       {/* Documents Card */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Documents</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+            <div className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+            Documents
+          </h3>
           <button
             onClick={() => setEditingCard(editingCard === 'documents' ? null : 'documents')}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
           >
             {editingCard === 'documents' ? 'Cancel' : 'Edit'}
           </button>
@@ -796,7 +814,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                     </a>
                   </div>
                 )}
-                <label className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <label className="cursor-pointer inline-flex items-center px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
                   {uploadingPan ? 'Uploading...' : panCardUrl ? 'Change PAN Card' : 'Upload PAN Card'}
                   <input
                     type="file"
@@ -812,13 +830,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
               <button
                 type="button"
                 onClick={() => setEditingCard(null)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleSaveCard('documents', {})}
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg shadow-blue-500/30"
               >
                 Save Changes
               </button>
@@ -828,7 +846,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
           <div className="space-y-3">
             <div>
               <dt className="text-sm font-medium text-gray-500">PAN Card</dt>
-              <dd className="text-sm text-gray-900">
+              <dd className="text-sm text-gray-900 dark:text-white">
                 {employee.panCardUrl ? (
                   <div className="flex items-center space-x-4">
                     <img
@@ -855,12 +873,15 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
       </div>
 
       {/* Banking Details Card */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Banking Details</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
+            Banking Details
+          </h3>
           <button
             onClick={() => setEditingCard(editingCard === 'banking' ? null : 'banking')}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-lg text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
           >
             {editingCard === 'banking' ? 'Cancel' : 'Edit'}
           </button>
@@ -882,13 +903,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                     bankAccountHolderName: e.target.value,
                   })
                 }
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 placeholder="Enter account holder name"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Bank Account Number</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bank Account Number</label>
                 <input
                   type="text"
                   value={bankingForm.bankAccountNumber}
@@ -898,12 +919,12 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                       bankAccountNumber: e.target.value,
                     })
                   }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                   placeholder="Enter account number"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">IFSC Code</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">IFSC Code</label>
                 <input
                   type="text"
                   value={bankingForm.bankIFSCCode}
@@ -913,7 +934,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
                       bankIFSCCode: e.target.value,
                     })
                   }
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="block w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg shadow-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                   placeholder="Enter IFSC code"
                 />
               </div>
@@ -922,13 +943,13 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
               <button
                 type="button"
                 onClick={() => setEditingCard(null)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg shadow-blue-500/30"
               >
                 Save Changes
               </button>
@@ -938,7 +959,7 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
           <div className="space-y-3">
             <div>
               <dt className="text-sm font-medium text-gray-500">Banking Details</dt>
-              <dd className="text-sm text-gray-900">
+              <dd className="text-sm text-gray-900 dark:text-white">
                 {employee.bankAccountHolderName || employee.bankAccountNumber || employee.bankIFSCCode ? (
                   <div className="space-y-1">
                     {employee.bankAccountHolderName && (
@@ -961,30 +982,33 @@ export default function ProfileCards({ userId }: ProfileCardsProps) {
       </div>
 
       {/* Work Information Card (Read-only) */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-all duration-200 hover:shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Work Information</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+            <div className="w-2 h-2 bg-indigo-500 rounded-full mr-3"></div>
+            Work Information
+          </h3>
           <span className="text-xs text-gray-500">Contact admin to update</span>
         </div>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <dt className="text-sm font-medium text-gray-500">Employee ID</dt>
-              <dd className="text-sm text-gray-900">{employee.employeeId}</dd>
+              <dd className="text-sm text-gray-900 dark:text-white">{employee.employeeId}</dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Position</dt>
-              <dd className="text-sm text-gray-900">{employee.position}</dd>
+              <dd className="text-sm text-gray-900 dark:text-white">{employee.position}</dd>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <dt className="text-sm font-medium text-gray-500">Department</dt>
-              <dd className="text-sm text-gray-900">{employee.department?.name || 'Not assigned'}</dd>
+              <dd className="text-sm text-gray-900 dark:text-white">{employee.department?.name || 'Not assigned'}</dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Join Date</dt>
-              <dd className="text-sm text-gray-900">
+              <dd className="text-sm text-gray-900 dark:text-white">
                 {new Date(employee.joinDate).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 

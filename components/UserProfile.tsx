@@ -312,7 +312,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
     <div className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
       <div className="px-4 py-6 sm:px-0">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold text-gray-900">My Profile</h1>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">My Profile</h1>
           {!editing && (
             <button
               onClick={() => setEditing(true)}
@@ -327,7 +327,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
           <div className="px-4 py-5 sm:px-6">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                   Employee Information
                 </h3>
                 <p className="mt-1 max-w-2xl text-sm text-gray-500">
@@ -398,7 +398,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                             })
                           }
                           placeholder="Enter phone number"
-                          className="flex-1 block w-full rounded-none rounded-r-md border border-gray-300 py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="flex-1 block w-full rounded-none rounded-r-md border border-gray-300 py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                         />
                       </div>
                     </div>
@@ -416,7 +416,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                             joinDate: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -434,12 +434,12 @@ export default function UserProfile({ userId }: UserProfileProps) {
                           dateOfBirth: e.target.value,
                         })
                       }
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                     />
                   </div>
 
                   <div className="border-t pt-4">
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
                       Marital Status
                     </h4>
                     <div className="space-y-4">
@@ -457,7 +457,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                           }
                           className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
-                        <label htmlFor="married" className="ml-2 block text-sm text-gray-900">
+                        <label htmlFor="married" className="ml-2 block text-sm text-gray-900 dark:text-white">
                           Married
                         </label>
                       </div>
@@ -476,7 +476,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                                 marriageAnniversary: e.target.value,
                               })
                             }
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                           />
                         </div>
                       )}
@@ -484,7 +484,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   </div>
 
                   <div className="border-t pt-4">
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
                       Address
                     </h4>
                     <div className="grid grid-cols-2 gap-4">
@@ -505,7 +505,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                               setShowCountryDropdown(true)
                             }}
                             placeholder="Search and select country"
-                            className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                            className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                           />
                           {showCountryDropdown && (
                             <div className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none">
@@ -513,16 +513,16 @@ export default function UserProfile({ userId }: UserProfileProps) {
                                 filteredCountries.slice(0, 10).map((country) => (
                                   <div
                                     key={country.cca2}
-                                    className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50 text-gray-900"
+                                    className="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50 text-gray-900 dark:text-white"
                                     onClick={() => handleCountrySelect(country.name.common)}
                                   >
-                                    <span className="block truncate text-gray-900">
+                                    <span className="block truncate text-gray-900 dark:text-white">
                                       {country.name.common}
                                     </span>
                                   </div>
                                 ))
                               ) : (
-                                <div className="cursor-default select-none relative py-2 pl-3 pr-9 text-gray-900">
+                                <div className="cursor-default select-none relative py-2 pl-3 pr-9 text-gray-900 dark:text-white">
                                   No countries found
                                 </div>
                               )}
@@ -549,7 +549,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                           onChange={(e) =>
                             setFormData({ ...formData, address: e.target.value })
                           }
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                         />
                       </div>
 
@@ -563,7 +563,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                           onChange={(e) =>
                             setFormData({ ...formData, city: e.target.value })
                           }
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                         />
                       </div>
 
@@ -577,7 +577,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                           onChange={(e) =>
                             setFormData({ ...formData, state: e.target.value })
                           }
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                         />
                       </div>
 
@@ -591,14 +591,14 @@ export default function UserProfile({ userId }: UserProfileProps) {
                           onChange={(e) =>
                             setFormData({ ...formData, zipCode: e.target.value })
                           }
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                         />
                       </div>
                     </div>
                   </div>
 
                   <div className="border-t pt-4">
-                    <h4 className="text-sm font-medium text-gray-900 mb-3">
+                    <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-3">
                       Emergency Contact
                     </h4>
                     <div className="grid grid-cols-3 gap-4">
@@ -615,7 +615,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                               emergencyContactName: e.target.value,
                             })
                           }
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                         />
                       </div>
 
@@ -650,7 +650,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                               })
                             }
                             placeholder="Enter phone number"
-                            className="flex-1 block w-full rounded-none rounded-r-md border border-gray-300 py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                            className="flex-1 block w-full rounded-none rounded-r-md border border-gray-300 py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                           />
                         </div>
                       </div>
@@ -668,7 +668,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                               emergencyContactRelation: e.target.value,
                             })
                           }
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                         />
                       </div>
                     </div>
@@ -676,7 +676,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
 
                   {/* Additional Contact Section */}
                   <div>
-                    <h4 className="text-lg font-medium text-gray-900 mb-4">Additional Contact</h4>
+                    <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Additional Contact</h4>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
                         Alternate Email
@@ -690,7 +690,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                             alternateEmail: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                         placeholder="Enter alternate email"
                       />
                     </div>
@@ -698,7 +698,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
 
                   {/* Documents Section */}
                   <div>
-                    <h4 className="text-lg font-medium text-gray-900 mb-4">Documents</h4>
+                    <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Documents</h4>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         PAN Card
@@ -737,7 +737,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
 
                   {/* Banking Details Section */}
                   <div>
-                    <h4 className="text-lg font-medium text-gray-900 mb-4">Banking Details</h4>
+                    <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Banking Details</h4>
                     <div className="grid grid-cols-1 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700">
@@ -752,7 +752,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                               bankAccountHolderName: e.target.value,
                             })
                           }
-                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                           placeholder="Enter account holder name"
                         />
                       </div>
@@ -770,7 +770,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                                 bankAccountNumber: e.target.value,
                               })
                             }
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                             placeholder="Enter account number"
                           />
                         </div>
@@ -787,7 +787,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                                 bankIFSCCode: e.target.value,
                               })
                             }
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                             placeholder="Enter IFSC code"
                           />
                         </div>
@@ -824,7 +824,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Full name
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.firstName} {employee.lastName}
                   </dd>
                 </div>
@@ -832,7 +832,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Employee ID
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.employeeId}
                   </dd>
                 </div>
@@ -840,13 +840,13 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Email address
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.user.email}
                   </dd>
                 </div>
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Phone</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.phoneNumber || 'Not provided'}
                   </dd>
                 </div>
@@ -854,7 +854,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Date of Birth
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.dateOfBirth 
                       ? new Date(employee.dateOfBirth).toLocaleDateString('en-US', { 
                           year: 'numeric', 
@@ -869,10 +869,10 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Marital Status
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.married ? 'Married' : 'Single'}
                     {employee.married && employee.marriageAnniversary && (
-                      <div className="text-gray-600 text-xs mt-1">
+                      <div className="text-gray-600 dark:text-gray-400 text-xs mt-1">
                         Anniversary: {new Date(employee.marriageAnniversary).toLocaleDateString('en-US', { 
                           year: 'numeric', 
                           month: 'long', 
@@ -886,7 +886,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Department
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.department?.name || 'Not assigned'}
                   </dd>
                 </div>
@@ -894,7 +894,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Position
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.position}
                   </dd>
                 </div>
@@ -902,7 +902,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Join Date
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {new Date(employee.joinDate).toLocaleDateString('en-US', { 
                       year: 'numeric', 
                       month: 'long', 
@@ -912,7 +912,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                 </div>
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Address</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.address && employee.city ? (
                       <>
                         {employee.address}
@@ -932,7 +932,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Emergency Contact
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.emergencyContactName ? (
                       <>
                         {employee.emergencyContactName}
@@ -950,7 +950,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Alternate Email
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.alternateEmail || 'Not provided'}
                   </dd>
                 </div>
@@ -958,7 +958,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     PAN Card
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.panCardUrl ? (
                       <div className="flex items-center space-x-4">
                         <img
@@ -984,7 +984,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                   <dt className="text-sm font-medium text-gray-500">
                     Banking Details
                   </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                     {employee.bankAccountHolderName || employee.bankAccountNumber || employee.bankIFSCCode ? (
                       <div className="space-y-1">
                         {employee.bankAccountHolderName && (

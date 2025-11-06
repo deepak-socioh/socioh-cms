@@ -21,7 +21,7 @@ export default function Navbar({ user }: NavbarProps) {
     return `inline-flex items-center px-1 pt-1 text-sm font-medium ${
       isActive
         ? 'text-blue-600 border-b-2 border-blue-600'
-        : 'text-gray-500 hover:text-gray-900 hover:border-b-2 hover:border-gray-300'
+        : 'text-gray-500 hover:text-gray-900 dark:text-white hover:border-b-2 hover:border-gray-300'
     }`
   }
 
@@ -31,7 +31,7 @@ export default function Navbar({ user }: NavbarProps) {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <h1 className="text-xl font-bold text-gray-900">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
                 Socioh CRM
               </h1>
             </div>
@@ -83,7 +83,7 @@ export default function Navbar({ user }: NavbarProps) {
                   />
                 )}
                 <div className="text-sm">
-                  <p className="text-gray-900 font-medium">{user.name}</p>
+                  <p className="text-gray-900 dark:text-white font-medium">{user.name}</p>
                   <p className="text-gray-500 text-xs">{user.email}</p>
                   <p className="text-blue-600 text-xs font-semibold">
                     {user.role}

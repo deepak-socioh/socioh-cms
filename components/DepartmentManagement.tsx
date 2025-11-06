@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import DepartmentBulkImportModal from './DepartmentBulkImportModal'
 
 interface Department {
   id: string
@@ -18,6 +19,7 @@ export default function DepartmentManagement() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingDepartment, setEditingDepartment] = useState<Department | null>(null)
+  const [showBulkImport, setShowBulkImport] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -114,6 +116,44 @@ export default function DepartmentManagement() {
     setFormData({ name: '', description: '', isActive: true })
   }
 
+  const handleBulkImport = async (departmentNames: string[]) => {
+    try {
+      const response = await fetch('/api/departments/bulk-import', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ departments: departmentNames }),
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        let message = `Import completed! Created: ${result.created}, Skipped: ${result.skipped}`
+        
+        if (result.createdDepartments && result.createdDepartments.length > 0) {
+          message += `\n\nCreated: ${result.createdDepartments.join(', ')}`
+        }
+        
+        if (result.skippedDepartments && result.skippedDepartments.length > 0) {
+          message += `\n\nSkipped (already exist): ${result.skippedDepartments.join(', ')}`
+        }
+        
+        if (result.errors && result.errors.length > 0) {
+          message += `\n\nErrors: ${result.errors.join(', ')}`
+        }
+        
+        alert(message)
+        fetchDepartments()
+      } else {
+        const error = await response.json()
+        alert(`Import failed: ${error.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error importing departments:', error)
+      alert('Error importing departments')
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -123,26 +163,46 @@ export default function DepartmentManagement() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div className="w-full p-6">
       <div className="px-4 py-6 sm:px-0">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold text-gray-900">
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
             Department Management
           </h1>
-          <button
-            onClick={() => setShowForm(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Add Department
-          </button>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setShowBulkImport(true)}
+              className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+              </svg>
+              Bulk Import
+            </button>
+            <button
+              onClick={() => setShowForm(true)}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Add Department
+            </button>
+          </div>
         </div>
+
+        {/* Bulk Import Modal */}
+        {showBulkImport && (
+          <DepartmentBulkImportModal
+            isOpen={showBulkImport}
+            onClose={() => setShowBulkImport(false)}
+            onImport={handleBulkImport}
+          />
+        )}
 
         {/* Department Form Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-900">
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                   {editingDepartment ? 'Edit Department' : 'Add New Department'}
                 </h3>
                 <button
@@ -165,7 +225,7 @@ export default function DepartmentManagement() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                   />
                 </div>
 
@@ -179,7 +239,7 @@ export default function DepartmentManagement() {
                       setFormData({ ...formData, description: e.target.value })
                     }
                     rows={3}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white"
                   />
                 </div>
 
@@ -193,7 +253,7 @@ export default function DepartmentManagement() {
                     }
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
-                  <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">
+                  <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900 dark:text-white">
                     Active
                   </label>
                 </div>
@@ -220,15 +280,15 @@ export default function DepartmentManagement() {
         )}
 
         {/* Departments Table */}
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
           {departments.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500">No departments found. Add one to get started.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Department Name
@@ -250,21 +310,21 @@ export default function DepartmentManagement() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {departments.map((department) => (
-                    <tr key={department.id} className="hover:bg-gray-50">
+                    <tr key={department.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {department.name}
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-gray-900 dark:text-white">
                           {department.description || 'No description'}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-gray-900 dark:text-white">
                           {department._count.employees} employees
                         </div>
                       </td>
@@ -279,7 +339,7 @@ export default function DepartmentManagement() {
                           {department.isActive ? 'Active' : 'Inactive'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                         {new Date(department.createdAt).toLocaleDateString('en-US', { 
                           year: 'numeric', 
                           month: 'long', 

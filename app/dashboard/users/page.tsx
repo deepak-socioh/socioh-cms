@@ -31,25 +31,25 @@ export default async function UsersPage() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full p-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
             Manage system users and their access levels
           </p>
         </div>
 
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-          <ul className="divide-y divide-gray-200">
+        <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-md">
+          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
             {allUsers.map((user) => (
               <li key={user.id}>
                 <div className="px-4 py-4 sm:px-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {user.name || 'No name'}
                       </p>
-                      <p className="text-sm text-gray-500">{user.email}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
                       <div className="mt-2 flex items-center space-x-4">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

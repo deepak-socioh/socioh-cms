@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import EmployeeForm from './EmployeeForm'
 import EmployeeList from './EmployeeList'
 import EmployeeGrid from './EmployeeGrid'
+import JsonImportModal from './JsonImportModal'
 
 export interface Employee {
   id: string
@@ -52,6 +53,7 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
+  const [showJsonImport, setShowJsonImport] = useState(false)
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table')
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedDepartment, setSelectedDepartment] = useState('')
@@ -224,6 +226,30 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
     fetchEmployees()
   }
 
+  const handleJsonImport = async (jsonData: any[]) => {
+    try {
+      const response = await fetch('/api/employees/bulk-import', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ employees: jsonData }),
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        alert(`Import completed! Created: ${result.created}, Updated: ${result.updated}`)
+        fetchEmployees()
+      } else {
+        const error = await response.json()
+        alert(`Import failed: ${error.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error importing data:', error)
+      alert('Error importing data')
+    }
+  }
+
   const toggleColumn = (columnKey: keyof typeof visibleColumns) => {
     setCurrentView('custom')
     setVisibleColumns(prev => ({
@@ -328,20 +354,20 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-gray-500 dark:text-gray-400">Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div className="w-full">
       <div className="px-4 py-6 sm:px-0">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-semibold text-gray-900">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
               Socioh Team
             </h1>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
               {filteredEmployees.length} {filteredEmployees.length === 1 ? 'employee' : 'employees'}
             </div>
           </div>
@@ -352,7 +378,7 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
               <select
                 value={currentView}
                 onChange={(e) => switchView(e.target.value)}
-                className="px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="px-3 py-1 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 title={currentView in predefinedViews ? predefinedViews[currentView as keyof typeof predefinedViews].description : 'Custom column selection'}
               >
                 {Object.entries(predefinedViews).map(([key, view]) => (
@@ -362,19 +388,19 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
               </select>
               {/* View description */}
               {currentView in predefinedViews && (
-                <div className="absolute top-full right-0 mt-1 text-xs text-gray-500 whitespace-nowrap z-20 pointer-events-none">
+                <div className="absolute top-full right-0 mt-1 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap z-20 pointer-events-none">
                   {predefinedViews[currentView as keyof typeof predefinedViews].description}
                 </div>
               )}
             </div>
 
-            <div className="flex border border-gray-300 rounded-md">
+            <div className="flex border border-gray-300 dark:border-gray-600 rounded-md">
               <button
                 onClick={() => setViewMode('table')}
                 className={`px-3 py-1 text-sm font-medium rounded-l-md ${
                   viewMode === 'table'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
                 }`}
               >
                 <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -384,10 +410,10 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
               </button>
               <button
                 onClick={() => setViewMode('grid')}
-                className={`px-3 py-1 text-sm font-medium rounded-r-md border-l ${
+                className={`px-3 py-1 text-sm font-medium rounded-r-md border-l border-gray-300 dark:border-gray-600 ${
                   viewMode === 'grid'
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
                 }`}
               >
                 <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -401,7 +427,7 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
             <div className="relative">
               <button
                 onClick={() => setShowColumnSelector(!showColumnSelector)}
-                className="inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-3 py-1 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
@@ -412,20 +438,20 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
               {showColumnSelector && (
                 <>
                   <div className="fixed inset-0 z-5" onClick={() => setShowColumnSelector(false)} />
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                  <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black dark:ring-gray-600 ring-opacity-5 focus:outline-none z-10 border border-gray-200 dark:border-gray-700">
                     <div className="py-1">
-                      <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                      <div className="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
                         Show/Hide Columns
                       </div>
                       {Object.entries(visibleColumns).map(([key, isVisible]) => (
-                        <label key={key} className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer">
+                        <label key={key} className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
                           <input
                             type="checkbox"
                             checked={isVisible}
                             onChange={() => toggleColumn(key as keyof typeof visibleColumns)}
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                           />
-                          <span className="ml-2 text-sm text-gray-700 capitalize">
+                          <span className="ml-2 text-sm text-gray-700 dark:text-gray-300 capitalize">
                             {key.replace(/([A-Z])/g, ' $1').trim()}
                           </span>
                         </label>
@@ -436,12 +462,23 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
               )}
             </div>
             {!readOnly && (
-              <button
-                onClick={() => setShowForm(true)}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-2"
-              >
-                Add Employee
-              </button>
+              <>
+                <button
+                  onClick={() => setShowJsonImport(true)}
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                  </svg>
+                  Import JSON
+                </button>
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-2"
+                >
+                  Add Employee
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -453,12 +490,20 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
           />
         )}
 
+        {showJsonImport && (
+          <JsonImportModal
+            isOpen={showJsonImport}
+            onClose={() => setShowJsonImport(false)}
+            onImport={handleJsonImport}
+          />
+        )}
+
         {/* Filters */}
-        <div className="bg-white shadow rounded-lg p-4 mb-6">
+        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 mb-6 border border-gray-200 dark:border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Search */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Search
               </label>
               <input
@@ -466,19 +511,19 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
                 placeholder="Search by name, email, or ID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                className="block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-400"
               />
             </div>
 
             {/* Department Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Department
               </label>
               <select
                 value={selectedDepartment}
                 onChange={(e) => setSelectedDepartment(e.target.value)}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                className="block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700"
               >
                 <option value="">All Departments</option>
                 {departments.map((dept) => (
@@ -491,13 +536,13 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
 
             {/* Role Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Role
               </label>
               <select
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+                className="block w-full border border-gray-300 dark:border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700"
               >
                 <option value="">All Roles</option>
                 <option value="ADMIN">Admin</option>
@@ -541,16 +586,16 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
             </button>
             
             {showAdvancedFilters && (
-              <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                 {/* Marital Status Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Marital Status
                   </label>
                   <select
                     value={selectedMarriedStatus}
                     onChange={(e) => setSelectedMarriedStatus(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700"
                   >
                     <option value="">All</option>
                     <option value="married">Married</option>
@@ -560,13 +605,13 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
 
                 {/* Country Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Country
                   </label>
                   <select
                     value={selectedCountry}
                     onChange={(e) => setSelectedCountry(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700"
                   >
                     <option value="">All Countries</option>
                     {countries.map(country => (
@@ -577,13 +622,13 @@ export default function AdminDashboard({ readOnly = false }: AdminDashboardProps
 
                 {/* Joining Year Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Joining Year
                   </label>
                   <select
                     value={selectedJoiningYear}
                     onChange={(e) => setSelectedJoiningYear(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700"
                   >
                     <option value="">All Years</option>
                     {joiningYears.map(year => (
